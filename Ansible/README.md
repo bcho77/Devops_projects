@@ -1,0 +1,1 @@
+In this project we use ansible to install terraform on a virtual server. In order to use IAC to provisione ressources in the Cloud enviroment namly AWS(Amazon Web Server).

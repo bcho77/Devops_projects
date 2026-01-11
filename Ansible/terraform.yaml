@@ -1,0 +1,69 @@
+- name: update repo
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt repository cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "ubuntu" or ansible_os_family == "Debian"
+
+    - name: install dependencies
+      apt:
+        name:
+          - gnupg
+          - software-properties-common
+        
+        state: present
+        update_cache: yes
+    - name: Add HashiCorp's GPG key
+      ansible.builtin.apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        state: present
+    - name: Add HashiCorp's official repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main
+        state: present
+    - name: Update apt repository cache after adding HashiCorp repo 
+      apt:
+        update_cache: yes
+    - name: Install Terraform
+      apt:
+        name: terraform
+        state: present
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # - name: Update yum repository cache
+    #   yum:
+    #     update_cache: yes
+    #   when: ansible_os_family == "RedHat"
+
+    # - name: Upgrade all packages on Debian-based systems
+    #   apt:
+    #     upgrade: dist
+    #   when: ansible_os_family == "Debian"
+      
+    # - name: Upgrade all packages on RedHat-based systems
+    #   yum:
+    #     upgrade: yes
+    #   when: ansible_os_family == "RedHat"
