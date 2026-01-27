@@ -1,0 +1,54 @@
+# This ansible script installs Jenkins on a target machine.
+
+- name: install Jenkins
+  hosts: 192.169.0.105
+  become: yes
+
+  tasks: 
+    - name: Update apt repository
+      ansible.builtin.apt:
+        name: server
+        update_cache: yes
+    - name: Install Java
+      ansible.builtin.apt:
+        name: 
+          - fontconfig
+          - openjdk-21-jre
+        state: present
+
+    - name: check java version
+      ansible.builtin.command: java -version
+      register: java_version
+    - name: print java version
+      ansible.builtin.debug:
+        var: java_version.stdout_lines
+
+    - name: Add Jenkins apt repository key
+      ansible.builtin.apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+        state: present
+    - name: Add Jenkins apt repository
+      ansible.builtin.apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable binary/
+        state: present
+    - name: Update apt repository cache after adding Jenkins repo
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Install Jenkins
+      ansible.builtin.apt:
+        name: jenkins
+        state: present
+    - name: Ensure Jenkins is started and enabled
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: yes
+    - name: Check Jenkins service status
+      ansible.builtin.systemd:
+        name: jenkins
+        state: started
+      register: jenkins_status
+    - name: Print Jenkins service status
+      ansible.builtin.debug:
+        var: jenkins_status 
+
