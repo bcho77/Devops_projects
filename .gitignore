@@ -1,45 +1,60 @@
+#######################################
 # Terraform
+#######################################
+
+# Local .terraform directories
 .terraform/
+**/.terraform/
+
+# Terraform state files
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
+crash.log
+
+# Terraform variable files (often contain secrets)
+*.tfvars
+*.tfvars.json
+
+# Terraform CLI configuration
+.terraformrc
+terraform.rc
+
+# Terraform dependency lock file
+# (OPTIONAL – see note below)
 .terraform.lock.hcl
 
+#######################################
+# Sensitive files
+#######################################
+*.pem
+*.key
+*.crt
+*.p12
+*.env
+.env.*
 
+#######################################
+# OS / Editor junk
+#######################################
+.DS_Store
+Thumbs.db
 
+# VS Code
+.vscode/
+!.vscode/extensions.json
 
+# IntelliJ / JetBrains
+.idea/
+*.iml
 
+#######################################
+# Logs
+#######################################
+*.log
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # Build and Release Folders
-# bin-debug/
-# bin-release/
-# [Oo]bj/
-# [Bb]in/
-
-# # Other files and folders
-# .settings/
-
-# # Executables
-# *.swf
-# *.air
-# *.ipa
-# *.apk
-
-# # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# # should NOT be excluded as they contain compiler settings and other important
-# # information for Eclipse / Flash Builder.
-
-
+#######################################
+# Backup files
+#######################################
+*.bak
+*.tmp
+*~
