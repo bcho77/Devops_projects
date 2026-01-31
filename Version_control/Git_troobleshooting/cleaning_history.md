@@ -87,3 +87,8 @@ Example:
 ```bash
 git push origin main
 ```
+
+<!-- To push the current branch and set the remote as upstream, use -->
+```bash
+git push --set-upstream origin main
+```
