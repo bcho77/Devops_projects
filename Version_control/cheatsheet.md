@@ -74,6 +74,9 @@ git fetch                      # Fetch updates
 git pull                       # Fetch & merge
 git push origin main           # Push to remote
 git push -u origin main        # Set upstream
+git config pull.rebase false  # merge (the default strategy)
+git config pull.rebase true   # rebase
+git config pull.ff only       # fast-forward only
 ```
 
 ## Tags
@@ -129,6 +132,11 @@ git checkout -b feature
 git add .
 git commit -m "feature"
 git push -u origin feature
+
+
+
+git rm -r --cached Terraform\&Aws/terraform-aws-services-modules/**/.terraform
+
 ```
 
 ---

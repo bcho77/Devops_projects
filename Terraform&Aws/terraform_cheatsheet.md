@@ -106,6 +106,8 @@ export TF_LOG_PATH=terraform.log
 ## Backend & State Locking
 
 ```bash
+terraform init -migrate-state
+
 terraform init -backend-config=backend.hcl
 terraform force-unlock <lock_id>
 ```
@@ -130,6 +132,4 @@ terraform plan
 terraform apply
 ```
 
----
 
-*This Terraform cheatsheet covers the most commonly used commands for infrastructure provisioning, state management, and DevOps workflows.*
