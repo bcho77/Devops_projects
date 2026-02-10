@@ -1,12 +1,12 @@
 # This ansible script installs Jenkins on a target machine.
 
 - name: install Jenkins
-  hosts: 192.169.0.105
+  hosts: all
   become: yes
 
   tasks: 
     - name: Update apt repository
-      ansible.builtin.apt:
+      ansible.builtin.apt:  
         name: server
         update_cache: yes
     - name: Install Java
