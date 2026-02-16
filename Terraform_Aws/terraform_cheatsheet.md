@@ -131,5 +131,12 @@ terraform validate
 terraform plan
 terraform apply
 ```
+| Action         | Command                                                                          |
+| -------------- | -------------------------------------------------------------------------------- |
+| Init           | `terraform init`                                                                 |
+| Plan           | `terraform plan -out=tfplan`                                                     |
+| Apply          | `terraform apply tfplan`                                                         |
+| Destroy        | `terraform destroy -var-file=dev.tfvars`                                         |
+| Destroy (safe) | `terraform plan -destroy -out=destroy.tfplan` → `terraform apply destroy.tfplan` |
 
 
