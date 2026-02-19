@@ -61,3 +61,29 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+########### ALB Variables ##################
+
+
+variable "internal" {
+  description = "Whether the ALB is internal"
+  type        = bool
+  default     = false
+}
+
+variable "target_port" {
+  description = "Port the target groupp listens on"
+  type        = string
+}
+
+variable "target_protocol" {
+  description = "Protocol for target group"
+  type        = string
+  default     = "HTTP"
+}
+
+variable "health_check_path" {
+  description = "Health check path"
+  type        = string
+  default     = "/"
+}

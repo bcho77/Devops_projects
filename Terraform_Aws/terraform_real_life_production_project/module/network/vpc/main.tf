@@ -102,7 +102,7 @@ resource "aws_eip" "eip"{
 resource "aws_nat_gateway" "nat"{
     depends_on = [ aws_internet_gateway.igw ]
     count = local.nat_gateway_count
-    allocation_id = aws_eip.eip.id
+    allocation_id = aws_eip.eip[count.index].id
     subnet_id = aws_subnet.public[var.single_nat_gateway ? 0 : count.index].id
 
     tags = merge(
