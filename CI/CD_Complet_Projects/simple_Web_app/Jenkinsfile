@@ -2,77 +2,168 @@ pipeline {
     agent any
 
     environment {
-        // Define any environment variables here
-    IMAGE_NAME = 'vaninoel/jenkins-python-app:latest'
-    IMAGE_TAG = '$BUILD_NUMBER'
-
+        IMAGE_NAME = 'vaninoel/jenkins-python-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
-
     stages {
-        stage('Checkout') {
+
+        stage('Checkout Code') {
             steps {
-                echo 'Checking out code...'
-                // Add your checkout commands here
-            git branch: 'main', url: 'https://github.com/bcho77/Devops_projects/tree/main/CI/CD_Complet_Projects/simple_Web_app'
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/bcho77/Devops_projects.git'
             }
         }
-        stage('install dependencies') {
+
+        stage('Install dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                // Add your dependency installation commands here
-                sh '''
-                    python3 -m venv venv
-                    . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                '''
+                dir('CI/CD_Complet_Projects/simple_Web_app') {
+                    sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    '''
+                }
             }
         }
+
         stage('Run tests') {
             steps {
                 echo 'Running tests...'
-                // Add your test commands here
-                sh '''
-                    . venv/bin/activate
-                    pytest test_app.py
-                '''
+                dir('CI/CD_Complet_Projects/simple_Web_app') {
+                    sh '''
+                        . venv/bin/activate
+                        pytest test_app.py
+                    '''
+                }
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                echo 'Building...'
-                // Add your build commands here
-                sh '''
-                    docker build -t $IMAGE_NAME:$IMAGE_TAG .
-                    docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
-
-                '''
+                echo 'Building Docker image...'
+                dir('CI/CD_Complet_Projects/simple_Web_app') {
+                    sh '''
+                        docker build -t $IMAGE_NAME:$IMAGE_TAG .
+                        docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+                    '''
+                }
             }
         }
+
         stage('Login to Docker Hub') {
             steps {
-                echo 'Logging in to Docker Hub...'
-                // Add your test commands here
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-credentials', 
-                    usernameVariable: 'DOCKER_USERNAME', 
-                    passwordVariable: 'DOCKER_PASSWORD')]) {
+                    credentialsId: 'docker-hub-credentials',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
                     sh '''
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
                     '''
                 }
             }
         }
+
         stage('Push Docker Image') {
             steps {
-                echo 'Pushing Docker image...'
-                // Add your push commands here
                 sh '''
                     docker push $IMAGE_NAME:$IMAGE_TAG
                     docker push $IMAGE_NAME:latest
                 '''
             }
         }
+
     }
 }
+
+
+
+
+// pipeline {
+//     agent any
+
+//     environment {
+//         // Define any environment variables here
+//     IMAGE_NAME = 'vaninoel/jenkins-python-app:latest'
+//     IMAGE_TAG = '$BUILD_NUMBER'
+
+//     }
+
+
+//     stages {
+//         stage('Clone the git repository') {
+//             steps {
+//                 echo 'Preparing...'
+//                 // Add any preparation steps here
+//                 git clone 
+//             }
+//         }
+//         stage('Checkout') {
+//             steps {
+//                 echo 'Checking out code...'
+//                 // Add your checkout commands here
+//             git branch: 'main', url: 'https://github.com/bcho77/Devops_projects/tree/main/CI/CD_Complet_Projects/simple_Web_app'
+//             }
+//         }
+//         stage('install dependencies') {
+//             steps {
+//                 echo 'Installing dependencies...'
+//                 // Add your dependency installation commands here
+//                 sh '''
+//                     python3 -m venv venv
+//                     . venv/bin/activate
+//                     pip install --upgrade pip
+//                     pip install -r requirements.txt
+//                 '''
+//             }
+//         }
+//         stage('Run tests') {
+//             steps {
+//                 echo 'Running tests...'
+//                 // Add your test commands here
+//                 sh '''
+//                     . venv/bin/activate
+//                     pytest test_app.py
+//                 '''
+//             }
+//         }
+//         stage('Build Docker Image') {
+//             steps {
+//                 echo 'Building...'
+//                 // Add your build commands here
+//                 sh '''
+//                     docker build -t $IMAGE_NAME:$IMAGE_TAG .
+//                     docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+
+//                 '''
+//             }
+//         }
+//         stage('Login to Docker Hub') {
+//             steps {
+//                 echo 'Logging in to Docker Hub...'
+//                 // Add your test commands here
+//                 withCredentials([usernamePassword(
+//                     credentialsId: 'docker-hub-credentials', 
+//                     usernameVariable: 'DOCKER_USERNAME', 
+//                     passwordVariable: 'DOCKER_PASSWORD')]) {
+//                     sh '''
+//                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+//                     '''
+//                 }
+//             }
+//         }
+//         stage('Push Docker Image') {
+//             steps {
+//                 echo 'Pushing Docker image...'
+//                 // Add your push commands here
+//                 sh '''
+//                     docker push $IMAGE_NAME:$IMAGE_TAG
+//                     docker push $IMAGE_NAME:latest
+//                 '''
+//             }
+//         }
+//     }
+// }
