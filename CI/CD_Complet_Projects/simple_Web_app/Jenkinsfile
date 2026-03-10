@@ -14,25 +14,64 @@ pipeline {
             steps {
                 echo 'Checking out code...'
                 // Add your checkout commands here
-            git branch: 'main', url: ''
+            git branch: 'main', url: 'https://github.com/bcho77/Devops_projects/tree/main/CI/CD_Complet_Projects/simple_Web_app'
             }
         }
-        stage('Build') {
+        stage('install dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+                // Add your dependency installation commands here
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+        stage('Run tests') {
+            steps {
+                echo 'Running tests...'
+                // Add your test commands here
+                sh '''
+                    . venv/bin/activate
+                    pytest test_app.py
+                '''
+            }
+        }
+        stage('Build Docker Image') {
             steps {
                 echo 'Building...'
                 // Add your build commands here
+                sh '''
+                    docker build -t $IMAGE_NAME:$IMAGE_TAG .
+                    docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+
+                '''
             }
         }
-        stage('Test') {
+        stage('Login to Docker Hub') {
             steps {
-                echo 'Testing...'
+                echo 'Logging in to Docker Hub...'
                 // Add your test commands here
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub-credentials', 
+                    usernameVariable: 'DOCKER_USERNAME', 
+                    passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                    '''
+                }
             }
         }
-        stage('Deploy') {
+        stage('Push Docker Image') {
             steps {
-                echo 'Deploying...'
-                // Add your deploy commands here
+                echo 'Pushing Docker image...'
+                // Add your push commands here
+                sh '''
+                    docker push $IMAGE_NAME:$IMAGE_TAG
+                    docker push $IMAGE_NAME:latest
+                '''
             }
         }
     }

@@ -1,0 +1,20 @@
+# Simple Python App for DevOps Interview Practice
+
+This project demonstrates a simple CI/CD workflow:
+
+- Python Flask app
+- Basic tests with pytest
+- Build artifact creation
+- Docker image build
+- Push Docker image to Docker Hub using Jenkins
+
+## Endpoints
+
+- `/` -> returns a welcome message
+- `/health` -> returns app health status
+
+## Run locally
+
+```bash
+pip install -r requirements.txt
+python app.py
