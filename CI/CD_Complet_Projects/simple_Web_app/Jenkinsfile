@@ -79,12 +79,16 @@ pipeline {
         stage('Deploy to minikube with helm') {
             steps {
                 echo 'Deploying to Kubernetes with Helm...'
+                dir('CI/CD_Complet_Projects/simple_Web_app') {
                 sh '''
+                    pwd
+                    ls -la
                     helm upgrade --install mypyweb ./mypyweb \
                     --set image.repository=$IMAGE_NAME \
                     --set image.tag=$IMAGE_TAG \
                     --namespace default
                 '''
+                }
             }
         }
 
