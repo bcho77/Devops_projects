@@ -83,7 +83,7 @@ pipeline {
                 sh '''
                     pwd
                     ls -la
-                    helm upgrade --install mypyweb ./mypyweb \
+                    helm upgrade --install myapp ./mypyweb \
                     --set image.repository=$IMAGE_NAME \
                     --set image.tag=$IMAGE_TAG \
                     --namespace default
