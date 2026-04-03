@@ -10,8 +10,8 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0   # 🔥 guarantees zero downtime
-      maxSurge: 1     # 🔥 allows one extra pod to be created during the update, ensuring that there is always at least one pod available to serve traffic.
+      maxUnavailable: 0   # guarantees zero downtime
+      maxSurge: 1     # allows one extra pod to be created during the update, ensuring that there is always at least one pod available to serve traffic.
   template:
     metadata:
       labels:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: web-app
-        image: vaninoel/myweb:1.0
+        image: vaninoel/jenkins-python-app:latest
         ports:
         - containerPort: 5000
        
